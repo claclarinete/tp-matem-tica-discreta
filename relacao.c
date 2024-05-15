@@ -13,26 +13,21 @@ void imprime_par(struct par_ordenado pares) {
     printf("(%d, %d) ", pares.x, pares.y);
 }
 
-int compara(const void *a, const void *b) {
-    struct par_ordenado *parA = (struct par_ordenado *)a;
-    struct par_ordenado *parB = (struct par_ordenado *)b;
+bool compara_p() {
 
-    // Se o índice do primeiro par for par, faça o segundo par ser o inverso do primeiro
-    if ((parA->x % 2 == 0) && (parB->x % 2 == 0)) {
-        return parA->y - parB->x;
-    }
 
-    // Caso contrário, compare normalmente
-    if (parA->x != parB->x) {
-        return parA->x - parB->x;
-    } else {
-        return parA->y - parB->y;
-    }
+
 }
 
-// Função para ordenar um array de pares ordenados
-void ordena(struct par_ordenado pares[], int tamanho) {
-    qsort(pares, tamanho, sizeof(struct par_ordenado), compara);
+bool compara_i() {
+
+    
+}
+
+void ordena() {
+
+
+    
 }
 
 bool is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //checada 
