@@ -13,21 +13,42 @@ void imprime_par(struct par_ordenado pares) {
     printf("(%d, %d) ", pares.x, pares.y);
 }
 
-bool compara_p() {
+int compara(const void *a, const void *b) {
+    struct par_ordenado *parA = (struct par_ordenado *)a;
+    struct par_ordenado *parB = (struct par_ordenado *)b;
 
-
-
+    // Se o componente x for diferente, ordene pelos componentes x
+    if (parA->x != parB->x) {
+        return parA->x - parB->x;
+    }
+    // Se o componente y for diferente, ordene pelos componentes y
+    return parA->y - parB->y;
 }
 
-bool compara_i() {
-
-    
+// Função para ordenar um array de pares ordenados
+void ordena(struct par_ordenado pares[], int tamanho) {
+    qsort(pares, tamanho, sizeof(struct par_ordenado), compara);
 }
 
-void ordena() {
+void remove_inversos(struct par_ordenado pares[], int *tamanho) {
 
+    for (int i = 0; i < *tamanho; i++)
+    {
+        for (int j = i + 1; j < *tamanho; j++)
+        {
+            if (pares[i].x == pares[j].y && pares[i].y == pares[j].x)
+            {
+                for (int k = j; k < *tamanho - 1; k++)
+                {
+                    pares[k] = pares[k + 1];
+                }
+                (*tamanho)--;
+                j--;
+            }
+        }
+        
+    }
 
-    
 }
 
 bool is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //checada 
@@ -177,14 +198,6 @@ bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //falta ajust
     for (int i = 0; i < tamanho; i++)
     {
         bool found = false;
-        /*for (int j = 0; j < tamanho; j++)
-        {
-            if (pares[i].x == pares[j].y && pares[i].y == pares[j].x && pares[i].x == pares[i].y)
-            {
-                found = true;
-                break;
-            }
-        }*/
         for (int j = 0; j < tamanho; j++)
         {
             if (pares[i].x == pares[j].y && pares[i].y == pares[j].x)
@@ -207,8 +220,9 @@ bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //falta ajust
             }
         }
     }
-    
+
     ordena(excecoes, n_excecoes);
+    remove_inversos(excecoes, &n_excecoes);
 
     if (anti_simetrica)
     {
@@ -218,9 +232,9 @@ bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //falta ajust
     {
         printf("4. Anti-simetrica: F\n");
 
-        for (int i = 0; i < n_excecoes; i += 2)
+        for (int i = 0; i < n_excecoes; i++)
         {
-            printf("((%d, %d), (%d, %d)) ", excecoes[i].x, excecoes[i].y, excecoes[i + 1].y, excecoes[i + 1].x);
+            printf("((%d, %d), (%d, %d)) ", excecoes[i].x, excecoes[i].y, excecoes[i].y, excecoes[i].x);
         }
         
         printf("\n");
@@ -230,7 +244,51 @@ bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //falta ajust
 
 bool is_assimetrica(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //checada
 
-    if (is_reflexiva(a, tamanho_a, pares, tamanho_pares) && is_anti_simetrica(pares, tamanho_pares))
+    bool reflexiva = true;
+    
+    for (int i = 0; i < tamanho_a; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[j].x == a[i] && pares[j].x == pares[j].y)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            reflexiva = false;
+        }  
+    }
+
+    bool anti_simetrica = true;
+
+    for (int i = 0; i < tamanho_pares; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[i].x == pares[j].y && pares[i].y == pares[j].x)
+            {
+                for (int k = 0; k < tamanho_pares; k++)
+                {
+                    if (pares[i].x == pares[i].y)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    anti_simetrica = false;
+                }
+            }
+        }
+    }
+
+    if (reflexiva && anti_simetrica)
     {
         printf("5. Assimetrica: V\n");
         return true;
