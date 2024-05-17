@@ -46,9 +46,7 @@ void remove_inversos(struct par_ordenado pares[], int *tamanho) {
                 j--;
             }
         }
-        
     }
-
 }
 
 bool is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //checada 
@@ -158,7 +156,6 @@ bool is_simetrica(struct par_ordenado pares[], int tamanho) { // checada
                 found = true;
                 break;
             }
-            
         }
         if (!found)
         {
@@ -167,7 +164,6 @@ bool is_simetrica(struct par_ordenado pares[], int tamanho) { // checada
             n_excecoes ++;
             simetrica = false;
         }
-        
     }
     
     if (simetrica)
@@ -188,7 +184,7 @@ bool is_simetrica(struct par_ordenado pares[], int tamanho) { // checada
     }
 }
 
-bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //falta ajustar a saida das exceções
+bool is_anti_simetrica(struct par_ordenado pares[], int tamanho) { //checada
 
     bool anti_simetrica = true;
 
@@ -298,7 +294,7 @@ bool is_assimetrica(int a[], int tamanho_a, struct par_ordenado pares[], int tam
     }
 }
 
-bool is_transitiva(struct par_ordenado pares[], int tamanho) { // alterar a saida das exceções
+bool is_transitiva(struct par_ordenado pares[], int tamanho) { // checada
 
     bool transitiva = true;
 
@@ -331,12 +327,6 @@ bool is_transitiva(struct par_ordenado pares[], int tamanho) { // alterar a said
         }
     }
     
-    for (int i = 0; i < n_excecoes; i++)
-    {
-        /* code */
-    }
-    
-
     if (transitiva)
     {
         printf("6. Transitiva: V\n");
@@ -354,6 +344,167 @@ bool is_transitiva(struct par_ordenado pares[], int tamanho) { // alterar a said
         return false;
     }
 }
+
+bool relacao_equivalencia(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //verdadeira quando R é reflexiva, simétrica e transitiva
+
+    bool reflexiva = true;
+    
+    for (int i = 0; i < tamanho_a; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[j].x == a[i] && pares[j].x == pares[j].y)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            reflexiva = false;
+        }  
+    }
+
+    bool simetrica = true;
+    
+    for (int i = 0; i < tamanho_pares; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[i].x == pares[j].y && pares[i].y == pares[j].x)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            simetrica = false;
+        }
+    }
+
+    bool transitiva = true;
+    
+    for (int i = 0; i < tamanho_pares; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[i].y == pares[j].x)
+            {
+                for (int k = 0; k < tamanho_pares; k++)
+                {
+                    if (pares[k].x == pares[i].x && pares[k].y == pares[j].y)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    transitiva = false;
+                }
+            }
+        }
+    }
+
+    if (reflexiva && simetrica && transitiva)
+    {
+        printf("Relacao de equivalencia: V\n");
+        return true;
+    } else
+    {
+        printf("Relacao de equivalencia: F\n");
+        return false;
+    }
+}
+
+bool relacao_ordem_parcial(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { //verdadeira quando R é reflexiva, anti-simétrica e transitiva
+
+    bool reflexiva = true;
+    
+    for (int i = 0; i < tamanho_a; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[j].x == a[i] && pares[j].x == pares[j].y)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            reflexiva = false;
+        }  
+    }
+
+    bool anti_simetrica = true;
+
+    for (int i = 0; i < tamanho_pares; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[i].x == pares[j].y && pares[i].y == pares[j].x)
+            {
+                for (int k = 0; k < tamanho_pares; k++)
+                {
+                    if (pares[i].x == pares[i].y)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    anti_simetrica = false;
+                }
+            }
+        }
+    }
+
+    bool transitiva = true;
+    
+    for (int i = 0; i < tamanho_pares; i++)
+    {
+        bool found = false;
+        for (int j = 0; j < tamanho_pares; j++)
+        {
+            if (pares[i].y == pares[j].x)
+            {
+                for (int k = 0; k < tamanho_pares; k++)
+                {
+                    if (pares[k].x == pares[i].x && pares[k].y == pares[j].y)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    transitiva = false;
+                }
+            }
+        }
+    }
+
+    if (reflexiva && anti_simetrica && transitiva)
+    {
+        printf("Relacao de ordem parcial+: V\n");
+        return true;
+    } else
+    {
+        printf("Relacao de ordem parcial: F\n");
+        return false;
+    }
+
+}
+
+
 
 
 int main() {
@@ -400,6 +551,12 @@ int main() {
     is_assimetrica(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
 
     is_transitiva(conjuntoB, tamanhoB);
+
+    printf("\n");
+
+    relacao_equivalencia(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
+
+    relacao_ordem_parcial(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
     
     
 
