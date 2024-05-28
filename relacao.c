@@ -541,11 +541,11 @@ void fecho_reflexivo(int a[], int tamanho_a, struct par_ordenado pares[], int ta
         }  
     }
 
-    printf("Fecho reflexivo da relacao: ");
+    printf("Fecho reflexivo da relacao:");
     
     if (reflexiva)
     {
-        printf("R\n");
+        printf(" R\n");
     } else
     {
         struct par_ordenado fecho[50];
@@ -609,11 +609,11 @@ void fecho_simetrico(struct par_ordenado pares[], int tamanho) { // saida corrig
         }
     }
 
-    printf("Fecho simetrico da relacao: ");
+    printf("Fecho simetrico da relacao:");
     
     if (simetrica)
     {
-        printf("R\n");
+        printf(" R\n");
     } else
     {
         struct par_ordenado fecho[50];
@@ -683,11 +683,11 @@ void fecho_transitivo(struct par_ordenado pares[], int tamanho) { // saida corri
         }
     }
 
-    printf("Fecho transitivo da relacao: ");
+    printf("Fecho transitivo da relacao:");
     
     if (transitiva)
     {
-        printf("R\n");
+        printf(" R\n");
     } else
     {
         struct par_ordenado fecho[50];
@@ -763,74 +763,28 @@ void imprime_fechos(int a[], int tamanho_a, struct par_ordenado pares[], int tam
 }
 
 int main() {
-    // Exemplo de conjunto A
-    int conjuntoA[] = {3, 4, 5, 6, 7, 8};//{1, 2, 3, 4};
-
-    // Exemplo de conjunto de pares ordenados B
-    struct par_ordenado conjuntoB[] = {
-        /*{1, 2},
-        {2, 3},
-        {3, 4},
-        {1, 1}*/
-        {3, 5},
-        {5, 7},
-        {7, 3},
-        {5, 3},
-        {7, 5},
-        {3, 7},
-        {4, 6},
-        {6, 8},
-        {8, 4},
-        {6, 4},
-        {8, 6},
-        {4, 8},
-        {3, 3},
-        {4, 4},
-        {5, 5},
-        {6, 6},
-        {7, 7},
-        {8, 8}
-    };
-
-    int tamanhoA = sizeof(conjuntoA) / sizeof(conjuntoA[0]);
-    int tamanhoB = sizeof(conjuntoB) / sizeof(conjuntoB[0]);
-
-    imprime_propriedades(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
-    imprime_relacoes(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
-    imprime_fechos(conjuntoA, tamanhoA, conjuntoB, tamanhoB);
-
-    return 0;
     
-    
-    
-    /*int tamanho;
-    struct par_ordenado pares[50];
+    int tamanho;
+    int conjunto[50];
 
     scanf("%d ", &tamanho);
-    int *a = (int *)malloc(tamanho * sizeof(int));
-    for (int i = 0; i < tamanho; i++)
-    {
-        scanf("%d ", &a[i]);
-    }
-    for (int i = 0; i < 50; i++)
-    {
-        scanf("%d\n", &pares[i]);
-    }
-    
-    for (int i = 0; i < tamanho; i++)
-    {
-        is_reflexiva(a[tamanho], tamanho, pares);
-        if (is_reflexiva)
-        {
-            printf("verdadeiro\n");
-        } else
-        {
-            printf("falso\n");
-        }
-        
-        
-    }
-    
 
-    return 0;*/
+    for (int i = 0; i < tamanho; i++)
+    {
+        scanf("%d ", &conjunto[i]);
+    }
+    
+    struct par_ordenado pares[2450];
+    int tamanho_pares = 0;
+
+    while (tamanho < 2450 && scanf("%d %d", &pares[tamanho_pares].x, &pares[tamanho_pares].y) != EOF)
+    {
+        tamanho_pares++;
+    }
+    
+    imprime_propriedades(conjunto, tamanho, pares, tamanho_pares);
+    imprime_relacoes(conjunto, tamanho, pares, tamanho_pares);
+    imprime_fechos(conjunto, tamanho, pares, tamanho_pares);
+    
+    return 0;
 }
