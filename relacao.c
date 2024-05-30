@@ -57,6 +57,24 @@ void remove_inversos(struct par_ordenado pares[], int *tamanho) {
     }
 }
 
+void remove_duplicatas(struct par_ordenado pares[], int *tamanho) {
+    for (int i = 0; i < *tamanho; i++)
+    {
+        for (int j = i + 1; j < *tamanho; j++) //dois for para percorrer o array duas vezes e comparar dois pares de acordo com os índices i e j
+        {
+            if (pares[i].x == pares[j].x && pares[i].y == pares[j].y) //checa se os dois pares são iguais
+            {
+                for (int k = j; k < *tamanho - 1; k++) //loop para excluir o duplicado, realoca o índice dos pares que vem depois desse inverso
+                {
+                    pares[k] = pares[k + 1];
+                }
+                (*tamanho)--;
+                j--;
+            }
+        }
+    }
+}
+
 //função para checar a reflexividade (para todo a, existe (a, a)) de um conjunto de pares e imprimir o resultado
 void is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { 
     
@@ -85,6 +103,8 @@ void is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int taman
         }  
     }
 
+    ordena(excecoes, n_excecoes); //ordena as exceções
+
     //imprime os resultados na formatação adequada:
     if (reflexiva)
     {
@@ -97,7 +117,7 @@ void is_reflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int taman
         {
             imprime_par(excecoes[i]);
 
-            if (i< n_excecoes - 1)
+            if (i < n_excecoes - 1)
             {
                 printf(", ");
             }
@@ -135,6 +155,8 @@ void is_irreflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tam
         }
     }
     
+    ordena(excecoes, n_excecoes); //ordena as exceções
+
     //imprime os resultados adequadamente
     if (irreflexiva)
     {
@@ -147,7 +169,7 @@ void is_irreflexiva(int a[], int tamanho_a, struct par_ordenado pares[], int tam
         {
             imprime_par(excecoes[i]);
 
-            if (i< n_excecoes - 1)
+            if (i < n_excecoes - 1)
             {
                 printf(", ");
             }
@@ -185,6 +207,8 @@ void is_simetrica(struct par_ordenado pares[], int tamanho) {
         }
     }
     
+    ordena(excecoes, n_excecoes); //ordena as exceções
+
     //imprime os resultados na formatação correta
     if (simetrica)
     {
@@ -197,7 +221,7 @@ void is_simetrica(struct par_ordenado pares[], int tamanho) {
         {
             imprime_par(excecoes[i]);
 
-            if (i< n_excecoes - 1)
+            if (i < n_excecoes - 1)
             {
                 printf(", ");
             }
@@ -254,7 +278,7 @@ void is_anti_simetrica(struct par_ordenado pares[], int tamanho) {
         {
             printf("((%d, %d), (%d, %d))", excecoes[i].x, excecoes[i].y, excecoes[i].y, excecoes[i].x);
 
-            if (i< n_excecoes - 1)
+            if (i < n_excecoes - 1)
             {
                 printf(", ");
             }
@@ -267,13 +291,13 @@ void is_anti_simetrica(struct par_ordenado pares[], int tamanho) {
 //função que checa se um conjunto é assimétrico (irreflexivo e anti-simétrico) e imprime os resultados
 void is_assimetrica(int a[], int tamanho_a, struct par_ordenado pares[], int tamanho_pares) { 
 
-    //essa parte checa se a relação é reflexiva:
-    bool reflexiva = true;
+    //essa parte checa se a relação é irreflexiva:
+    bool irreflexiva = true;
     
     for (int i = 0; i < tamanho_a; i++)
     {
         bool found = false;
-        for (int j = 0; j < tamanho_pares; j++)
+        for (int j = 0; j < tamanho_pares; j++) 
         {
             if (pares[j].x == a[i] && pares[j].x == pares[j].y)
             {
@@ -281,10 +305,10 @@ void is_assimetrica(int a[], int tamanho_a, struct par_ordenado pares[], int tam
                 break;
             }
         }
-        if (!found)
+        if (found)
         {
-            reflexiva = false;
-        }  
+            irreflexiva = false;
+        }
     }
 
     //checa se a relação é anti-simétrica:
@@ -314,7 +338,7 @@ void is_assimetrica(int a[], int tamanho_a, struct par_ordenado pares[], int tam
     }
 
     //imprime os resultados
-    if (reflexiva && anti_simetrica) //checa se o conjunto é reflexivo e anti-simétrico
+    if (irreflexiva && anti_simetrica) //checa se o conjunto é reflexivo e anti-simétrico
     {
         printf("5. Assimetrica: V\n");
     } else {
@@ -332,11 +356,12 @@ void is_transitiva(struct par_ordenado pares[], int tamanho) {
     
     for (int i = 0; i < tamanho; i++)
     {
-        bool found = false;
         for (int j = 0; j < tamanho; j++) //loops para encontrar dois pares ordenados para comparar
         {
             if (pares[i].y == pares[j].x) //checa se y do par 1 é igual a x do par 2
             {
+                bool found = false;
+
                 for (int k = 0; k < tamanho; k++) //se verdadeiro, percorre o array de novo para comparar um terceiro par
                 {
                     if (pares[k].x == pares[i].x && pares[k].y == pares[j].y) //checa se os tres pares atendem às condições
@@ -356,6 +381,9 @@ void is_transitiva(struct par_ordenado pares[], int tamanho) {
         }
     }
     
+    ordena(excecoes, n_excecoes); //ordena as exceções
+    remove_duplicatas(excecoes, &n_excecoes); //remove possíveis duplicatas
+
     //imprime os resultados
     if (transitiva)
     {
@@ -368,7 +396,7 @@ void is_transitiva(struct par_ordenado pares[], int tamanho) {
         {
             imprime_par(excecoes[i]);
 
-            if (i< n_excecoes - 1)
+            if (i < n_excecoes - 1)
             {
                 printf(", ");
             }
@@ -532,7 +560,7 @@ void relacao_ordem_parcial(int a[], int tamanho_a, struct par_ordenado pares[], 
     //impressão dos resultados
     if (reflexiva && anti_simetrica && transitiva)
     {
-        printf("Relacao de ordem parcial+: V\n");
+        printf("Relacao de ordem parcial: V\n");
     } else
     {
         printf("Relacao de ordem parcial: F\n");
@@ -683,14 +711,68 @@ void fecho_simetrico(struct par_ordenado pares[], int tamanho) {
     }
 }
 
-//função para imprimir o facho transitivo (conjunto + pares necessários para torná-lo transitivo)
-void fecho_transitivo(struct par_ordenado pares[], int tamanho) {
+//função calcular o fecho transitivo (conjunto + pares necessários para torná-lo transitivo)
+void calcula_fecho_transitivo(struct par_ordenado pares[], int *tamanho) {
+
+    //declaração do array com os elementos do fecho
+    struct par_ordenado fecho[2450];
+    int n_fecho = *tamanho;
+
+    //preenchimento com os pares ordenados do conjunto inicial
+    for (int i = 0; i < *tamanho; i++) 
+    {
+        fecho[i] = pares[i];
+    }
+
+    //adição de todos os pares necessários para tornar o conjunto transitivo
+    bool adicionado;
+    do //uso do do-while garante a execução pelo menos uma vez
+    { 
+        adicionado = false;
+        for (int i = 0; i < n_fecho; i++) 
+        {
+            for (int j = 0; j < n_fecho; j++) 
+            {
+                if (fecho[i].y == fecho[j].x) 
+                { //comparação de dois elementos dentro do fecho
+                    bool found = false;
+                    for (int k = 0; k < n_fecho; k++) //percorre os pares do fecho
+                    {
+                        if (fecho[k].x == fecho[i].x && fecho[k].y == fecho[j].y) //verifica se o par já existe
+                        {
+                            found = true;
+                            break; //se já existe, o loop é interrompido
+                        }
+                    }
+                    if (!found) //caso contrário, o novo par é adicionado ao array, o tamanho é acrescido e o valor da bool "adicionado" é alterado
+                    {
+                        fecho[n_fecho].x = fecho[i].x;
+                        fecho[n_fecho].y = fecho[j].y;
+                        n_fecho++;
+                        adicionado = true;
+                    }
+                }
+            }
+        }
+    } while (adicionado);
+
+    //ordena e remove possíveis duplicatas do array
+    ordena(fecho, n_fecho);
+    remove_duplicatas(fecho, &n_fecho);
+
+    //manipula o tamanho para corrigi-lo de acordo com as novas adições
+    *tamanho = n_fecho;
+    for (int i = 0; i < n_fecho; i++) {
+        pares[i] = fecho[i];
+    }
+    
+}
+
+//função para imprimir adequadamente o fecho transitivo
+void imprime_fecho_transitivo(struct par_ordenado pares[], int tamanho) {
 
     //checa a transitividade e preenche o array de exceções
     bool transitiva = true;
-
-    struct par_ordenado excecoes[2450];
-    int n_excecoes = 0;
     
     for (int i = 0; i < tamanho; i++)
     {
@@ -709,16 +791,13 @@ void fecho_transitivo(struct par_ordenado pares[], int tamanho) {
                 }
                 if (!found)
                 {
-                    excecoes[n_excecoes].x = pares[i].x;
-                    excecoes[n_excecoes].y = pares[j].y;
-                    n_excecoes ++;
                     transitiva = false;
                 }
             }
         }
     }
-
-    //imprime os resultados de forma análoga às funções anteriores
+    
+    //impressão dos resultados
     printf("Fecho transitivo da relacao:");
     
     if (transitiva)
@@ -726,39 +805,20 @@ void fecho_transitivo(struct par_ordenado pares[], int tamanho) {
         printf(" R\n");
     } else
     {
-        struct par_ordenado fecho[2450];
-        int tamanho_fecho = tamanho + n_excecoes;
-
-        for (int i = 0; i < tamanho_fecho; i++)
-        {
-            if (i < tamanho)
-            {
-                fecho[i].x = pares[i].x;
-                fecho[i].y = pares[i].y;
-            } else
-            {
-                fecho[i].x = excecoes[i - tamanho].x;
-                fecho[i].y = excecoes[i - tamanho].y;
-            }
-        }
-        
-        ordena(fecho, tamanho_fecho);
-
+        calcula_fecho_transitivo(pares, &tamanho);
         printf("\n");
         
-        for (int i = 0; i < tamanho_fecho; i++)
+        for (int i = 0; i < tamanho; i++)
         {
-            imprime_par(fecho[i]);
+            imprime_par(pares[i]);
 
-            if (i< tamanho_fecho - 1)
+            if (i< tamanho - 1)
             {
                 printf(", ");
             }
         }
-
         printf("\n");
     }
-
 }
 
 //função que imprime todas as propriedades dado um determinado conjunto na formatação adequada
@@ -798,7 +858,7 @@ void imprime_fechos(int a[], int tamanho_a, struct par_ordenado pares[], int tam
 
     fecho_simetrico(pares, tamanho_pares);
 
-    fecho_transitivo(pares, tamanho_pares);
+    imprime_fecho_transitivo(pares, tamanho_pares);
 }
 
 int main() {
