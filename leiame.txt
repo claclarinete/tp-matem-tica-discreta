@@ -1,0 +1,15 @@
+Aluno: Clarice Oliveira Minobolli Teixeira
+Matrícula: 2023087761
+DCC216
+
+Trabalho Prático Matemática Discreta
+
+Ambiente Computacional: Usei o VsCode para a codificação no sistema operacional Windows. No entanto, o programa
+poderá ser executado em qualquer sistema operacional.
+
+Instruções de execução: 
+
+1. Compilar o programa: gcc .\relacao.c -o relacao
+
+2. Executar o programa com os arquivos de entrada: relacao.c < entrada.txt
+
