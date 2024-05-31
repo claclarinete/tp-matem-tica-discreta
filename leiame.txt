@@ -12,4 +12,3 @@ Instruções de execução:
 1. Compilar o programa: gcc .\relacao.c -o relacao
 
 2. Executar o programa com os arquivos de entrada: relacao.c < entrada.txt
-

@@ -3,7 +3,6 @@
 #include <stdlib.h> //bibliotecas utilizadas ao longo do programa
 
 //struct para armazenar pares ordenados (x, y), sendo dois ints
-
 struct par_ordenado {
     int x;
     int y;
@@ -57,6 +56,7 @@ void remove_inversos(struct par_ordenado pares[], int *tamanho) {
     }
 }
 
+//função para remover possíveis duplicatas em um array
 void remove_duplicatas(struct par_ordenado pares[], int *tamanho) {
     for (int i = 0; i < *tamanho; i++)
     {
@@ -765,7 +765,6 @@ void calcula_fecho_transitivo(struct par_ordenado pares[], int *tamanho) {
     for (int i = 0; i < n_fecho; i++) {
         pares[i] = fecho[i];
     }
-    
 }
 
 //função para imprimir adequadamente o fecho transitivo
